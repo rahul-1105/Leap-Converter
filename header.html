@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <title>header</title>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="/">
+                <h1>Leap <span>Converter</span></h1>
+            </a>
+        </div>
+        <div class="nav-left">
+            <ul class="nav-links">
+                <li><a href="../templates/merge preview.html">MERGE PDF</a></li>
+                <li><a href="../templates/split preview.html">SPLIT PDF</a></li>
+                <li> <a href="../templates/compress preview.html">COMPRESS PDF</a></li>
+                <li class="dropdown" onclick="convertDropdown()"><a href="#">CONVERT PDF <i
+                            class="bi bi-caret-down-fill"></i></a>
+                    <div class="convert-dropdown">
+                        <i class="bi bi-caret-up-fill"></i>
+                        <ul class="dropdown-content">
+                            <li><span>Convert to PDF</span>
+                                <ul class="dropdown-content-ul">
+                                    <li><a href="../templates/JPG to pdf preview.html"><img src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                            PDF</a></li>
+                                    <li><a href="../templates/word to pdf preview.html"><img src="../assets/wordToPdf.svg" alt="">WORD
+                                            TO PDF</a>
+                                    </li>
+                                    <li><a href="../templates/powerpoint to pdf preview.html"><img src="../assets/pptToPdf.svg"
+                                                alt="">POWERPOINT TO PDF</a>
+                                    </li>
+                                    <li><a href="../templates/excel to pdf preview.html"><img src="../assets/excleToPdf.svg"
+                                                alt="">EXCEL TO
+                                            PDF</a></li>
+                                    <li><a href="../templates/html to pdf preview.html"><img src="../assets/htmlToPdf.svg" alt="">HTML
+                                            TO PDF</a></li>
+                                </ul>
+                            </li>
+                            <li><span>Convert from PDF</span>
+                                <ul class="dropdown-content-ul">
+                                    <li><a href="../templates/pdf to jpg preview.html"><img src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                            JPG</a></li>
+                                    <li><a href="../templates/pdf to word preview.html"><img src="../assets/pdfToWord.svg" alt="">PDF
+                                            TO WORD</a>
+                                    </li>
+                                    <li><a href="../templates/pdf to powerpoint preview.html"><img src="../assets/pdfToPpt.svg"
+                                                alt="">PDF TO POWERPOINT</a>
+                                    </li>
+                                    <li><a href="../templates/pdf to excel preview.html"><img src="../assets/pdfToExcle.svg" alt="">PDF
+                                            TO
+                                            EXCEL</a></li>
+                                    <li><a href="../templates/pdf to pdfa preview.html"><img src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                            TO PDF/A</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="dropdown" onclick="toolsDropdown()"><a href="#"><span>ALL PDF TOOLS <i
+                                class="bi bi-caret-down-fill"></i></span><i class="bi bi-wrench"
+                            style="display: none;"></i></a>
+                    <div class="tools-dropdown">
+                        <i class="bi bi-caret-up-fill"></i>
+                        <ul class="dropdown-content">
+                            <li><span>ORGANIZE PDF</span>
+                                <ul class="dropdown-content-ul">
+                                    <li><a href="../templates/merge preview.html"><img src="../assets/mergePdf.svg" alt="">MERGE
+                                            PDF</a></li>
+                                    <li><a href="../templates/split preview.html"><img src="../assets/splitPdf.svg" alt="">SPLIT
+                                            PDF</a>
+                                    </li>
+                                    <li><a href="../templates/organize pdf preview.html"><img src="../assets/organizepdf.svg"
+                                                alt="">ORGANIZE PDF</a>
+                                    </li>
+                                    <li><a href="#"><img src="../assets/scanToPdf.svg" alt="">SCAN TO
+                                            PDF</a></li>
+                                </ul>
+                            </li>
+                            <li><span>OPTIMIZE PDF</span>
+                                <ul class="dropdown-content-ul">
+                                    <li><a href="../templates/compress preview.html"><img src="../assets/compressPdf.svg"
+                                                alt="">COMPRESS PDF</a>
+                                    </li>
+                                    <li><a href="../templates/Repair preview.html"><img src="../assets/repairPdf.svg"
+                                                alt="">REPAIR PDF</a>
+                                    </li>
+                                    <li><a href="../templates/ocr pdf preview.html"><img src="../assets/ocrPdf.svg" alt="">OCR
+                                            PDF</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><span>Convert to PDF</span>
+                                <ul class="dropdown-content-ul">
+                                    <li><a href="../templates/JPG to pdf preview.html"><img src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                            PDF</a></li>
+                                    <li><a href="../templates/word to pdf preview.html"><img src="../assets/wordToPdf.svg" alt="">WORD
+                                            TO PDF</a>
+                                    </li>
+                                    <li><a href="../templates/powerpoint to pdf preview.html"><img src="../assets/pptToPdf.svg"
+                                                alt="">POWERPOINT TO PDF</a>
+                                    </li>
+                                    <li><a href="../templates/excel to pdf preview.html"><img src="../assets/excleToPdf.svg"
+                                                alt="">EXCEL TO
+                                            PDF</a></li>
+                                    <li><a href="../templates/html to pdf preview.html"><img src="../assets/htmlToPdf.svg" alt="">HTML
+                                            TO PDF</a></li>
+                                </ul>
+                            </li>
+                            <li><span>Convert from PDF</span>
+                                <ul class="dropdown-content-ul">
+                                    <li><a href="../templates/pdf to jpg preview.html"><img src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                            JPG</a></li>
+                                    <li><a href="../templates/pdf to word preview.html"><img src="../assets/pdfToWord.svg" alt="">PDF
+                                            TO WORD</a>
+                                    </li>
+                                    <li><a href="../templates/pdf to powerpoint preview.html"><img src="../assets/pdfToPpt.svg"
+                                                alt="">PDF TO POWERPOINT</a>
+                                    </li>
+                                    <li><a href="../templates/pdf to excel preview.html"><img src="../assets/pdfToExcle.svg" alt="">PDF
+                                            TO
+                                            EXCEL</a></li>
+                                    <li><a href="../templates/pdf to pdfa preview.html"><img src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                            TO PDF/A</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><span>EDIT PDF</span>
+                                <ul class="dropdown-content-ul">
+                                    <li><a href="../templates/rotate pdf preview.html"><img src="../assets/rotatePdf.svg"
+                                                alt="">ROTATE PDF</a></li>
+                                    <li><a href="../templates/pagenumberpreview.html"><img src="../assets/pageNoPdf.svg" alt="">ADD
+                                            PAGE NUMBER</a>
+                                    </li>
+                                    <li><a href="../templates/watermark preview.html"><img src="../assets/watermark.svg"
+                                                alt="">ADD Watermark</a>
+                                    </li>
+                                    <li><a href="../templates/edit pdf options preview.html"><img src="../assets/editPdf.svg" alt="">EDIT
+                                            PDF</a></li>
+                                </ul>
+                            </li>
+                            <li><span>PDF SECUIRTY</span>
+                                <ul class="dropdown-content-ul">
+                                    <li><a href="../templates/unlockpdf preview.html"><img src="../assets/unlockPdf.svg"
+                                                alt="">UNLOCK PDF</a></li>
+                                    <li><a href="../templates/protectpdf preview.html"><img src="../assets/protectPdf.svg"
+                                                alt="">PROTECT PDF</a>
+                                    </li>
+                                    <li><a href="../templates/sign pdf preview.html"><img src="../assets/signPdf.svg" alt="">SIGN
+                                            PDF</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <button><span>Login</span><i class="bi bi-person-fill" style="display: none;"></i></button>
+        </div>
+    </div>
+    <script>
+
+        const convert = document.querySelector(".convert-dropdown");
+        const tools = document.querySelector(".tools-dropdown");
+
+        function convertDropdown() {
+            convert.classList.toggle("active");
+            tools.classList.remove("active");
+        }
+
+        function toolsDropdown() {
+            tools.classList.toggle("active");
+            convert.classList.remove("active");
+        }
+
+        function hideDropdown() {
+            convert.classList.remove("active");
+            convert.classList.remove("active");
+        }
+
+    </script>
+</body>
+
+</html>

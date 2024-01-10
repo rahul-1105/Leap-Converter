@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF File Upload and Preview</title>
+<link rel="stylesheet" href="preview.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="../styles/styles.css">
+<style>
+    #box {
+        padding: 3rem;
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+    }
+
+    .container3 {
+        width: 50%;
+        /* margin-left: 5%; */
+    }
+
+    .container5 {
+        width: 50%;
+        /* margin-top: 40px;
+            margin-left: 5%; */
+        padding-right: 2%;
+        border: 5px dotted red;
+        padding: 20px;
+    }
+
+
+    .container4 {
+        /* margin-top: 40px; */
+        border: 5px dotted red;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    .drop-zone input {
+        margin-left: 100px;
+    }
+
+    /* .botton3 {} */
+
+    #compressButton {
+
+        text-decoration: none;
+        background-color: #8b0000;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 7px;
+    }
+
+    @media (max-width: 768px) {
+        #box {
+            padding: 1rem;
+            /* align-items: center; */
+            flex-direction: column;
+            overflow: hidden;
+            gap: 1rem;
+        }
+
+        .container3 {
+            width: 100%;
+            height: max-content;
+        }
+
+        .container5 {
+            width: 100%;
+            padding-right: 2%;
+            border: 5px dotted red;
+            padding: 20px;
+        }
+
+
+        .container4 {
+            /* margin-top: 40px; */
+            overflow: hidden;
+            border: 5px dotted red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            text-align: center;
+
+        }
+
+        .drop-zone input {
+            margin-left: 125px;
+            font-size: 1.25rem;
+        }
+    }
+
+    @media (max-width: 374px) {
+        .drop-zone p {
+            font-size: 1.25rem;
+        }
+
+        .content1 h1 {
+            font-size: 2.125rem;
+        }
+    }
+
+    .container3 .fa {
+        font-size: 200px;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    .upload-container {
+        border: 3px dotted #ccc;
+        /* Dotted border with a length of 3px for left section */
+        padding: 20px;
+    }
+
+    #downloadButton {
+        display: none;
+        margin-top: 10px;
+    }
+
+    .btn-darkred {
+        background-color: darkred;
+        border: none;
+        color: white;
+        transition: background-color 0.3s;
+        /* Add transition for smooth color change on hover */
+    }
+
+    .btn-darkred:hover {
+        background-color: red-orange;
+        /* Reddish-orange color on hover */
+        color: white;
+    }
+
+    #pdfRange {
+        display: none;
+    }
+
+    #pdfPreview {
+        display: none;
+    }
+
+    .split-container {
+        border: 1px solid #ccc;
+        padding: 20px;
+    }
+
+    .split-heading {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .split-options {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .split-options a {
+        text-decoration: none;
+        color: black;
+    }
+
+
+    .split-option {
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .range-heading {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .range-buttons {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .split-button {
+        padding: 1rem;
+        background-color: darkred;
+        border: none;
+        color: white;
+        transition: background-color 0.3s;
+        width: 100%;
+    }
+
+    .split-button:hover {
+        background-color: rgb(240, 7, 7);
+        /* Reddish-orange color on hover */
+        color: white;
+    }
+
+    #spl {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .ranges .title4 {
+        font-weight: 400;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .form__group__container .title4 {
+        font-weight: 400;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+    .input.option,
+    select.option {
+        cursor: inherit;
+        -webkit-transition: none;
+        -o-transition: none;
+        transition: none;
+    }
+
+    .option__panel input,
+    .option__panel select {
+        width: 100%;
+    }
+
+    select,
+    select.input {
+        border-radius: 4px;
+        background-image: url(/img/svg_icons/select.svg);
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding: 4px 32px 4px 12px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .option {
+        -webkit-transition: all .4s linear;
+        -o-transition: all .4s linear;
+        transition: all .4s linear;
+    }
+
+    .input {
+        display: block;
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    select {
+        border-radius: 4px;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+
+    input,
+    label,
+    select {
+        line-height: 20px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22px;
+    }
+
+    select {
+        line-height: normal;
+        color: inherit;
+        font: inherit;
+        margin: 0;
+    }
+
+    .option__image {
+        cursor: pointer;
+        display: -ms-flexbox;
+        display: flex;
+        margin-left: -4px;
+        margin-right: -4px;
+    }
+
+    @media (max-width: 930px) {
+        .option__image {
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .option__image {
+            flex-wrap: nowrap;
+        }
+    }
+
+    @media (max-width: 430px) {
+        .option__image {
+            flex-wrap: wrap;
+        }
+    }
+
+    ol,
+    ul {
+        list-style: none;
+    }
+
+
+
+    @media (max-width: 90em) {
+        .option__image__item {
+            padding: 5px 18px;
+        }
+    }
+
+    .option__image__item {
+        padding: 1rem 12px;
+        position: relative;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        width: 50%;
+        text-align: center;
+        color: #85858e;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-pack: center;
+        align-items: center;
+        justify-content: center;
+        /* gap: 5px; */
+        margin: 4px;
+        background: #f5f5fa;
+        border-radius: 8px;
+        -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .1);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .1);
+        -webkit-transition: none;
+        -o-transition: none;
+        transition: none;
+        border: 2px solid rgba(0, 0, 0, 0);
+    }
+
+    .option__image__item button {
+        border: none;
+        outline: none;
+        background-color: transparent;
+    }
+
+    .option--active {
+        color: #e5322d;
+        border: 2px solid #e5322d;
+    }
+
+
+    h6 {
+        color: black;
+        margin: 0;
+    }
+
+
+    /* .option--active,
+    .option--active:hover {} */
+
+    element.style {
+        display: none;
+    }
+
+    .option__btn span {
+        padding: 12px;
+        text-transform: uppercase;
+    }
+
+    .option__btn {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        width: 200px;
+        margin: 8px auto;
+        -ms-flex-align: center;
+        align-items: center;
+        font-size: 14px;
+        -ms-flex-pack: start;
+        justify-content: center;
+        border-radius: 8px;
+        -webkit-box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .14);
+        box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .14);
+        letter-spacing: .3px;
+        text-align: center;
+        line-height: 18px;
+        color: #161616;
+        padding: 0;
+        overflow: hidden;
+        background: #f5f5fa;
+        border-width: 0;
+    }
+
+    [type=button],
+    [type=reset],
+    [type=submit],
+    button {
+        cursor: pointer;
+
+    }
+
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+        font: inherit;
+        margin: 0;
+    }
+
+    button,
+    html input[type=button],
+    input[type=reset],
+    input[type=submit] {
+        cursor: pointer;
+
+
+    }
+
+    .option__image a {
+        text-decoration: none;
+
+
+    }
+</style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <a href="/">
+                    <h1>Leap <span>Converter</span></h1>
+                </a>
+            </div>
+            <div class="nav-left">
+                <ul class="nav-links">
+                    <li><a href="../templates/merge preview.html">MERGE PDF</a></li>
+                    <li><a href="../templates/split preview.html">SPLIT PDF</a></li>
+                    <li> <a href="../templates/compress preview.html">COMPRESS PDF</a></li>
+                    <li class="dropdown" onclick="convertDropdown()"><a href="#">CONVERT PDF <i
+                                class="bi bi-caret-down-fill"></i></a>
+                        <div class="convert-dropdown">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <ul class="dropdown-content">
+                                <li><span>Convert to PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/JPG to pdf preview.html"><img
+                                                    src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/word to pdf preview.html"><img
+                                                    src="../assets/wordToPdf.svg" alt="">WORD
+                                                TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/powerpoint to pdf preview.html"><img
+                                                    src="../assets/pptToPdf.svg" alt="">POWERPOINT TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/excel to pdf preview.html"><img
+                                                    src="../assets/excleToPdf.svg" alt="">EXCEL TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/html to pdf preview.html"><img
+                                                    src="../assets/htmlToPdf.svg" alt="">HTML
+                                                TO PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert from PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/pdf to jpg preview.html"><img
+                                                    src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                                JPG</a></li>
+                                        <li><a href="../templates/pdf to word preview.html"><img
+                                                    src="../assets/pdfToWord.svg" alt="">PDF
+                                                TO WORD</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to powerpoint preview.html"><img
+                                                    src="../assets/pdfToPpt.svg" alt="">PDF TO POWERPOINT</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to excel preview.html"><img
+                                                    src="../assets/pdfToExcle.svg" alt="">PDF
+                                                TO
+                                                EXCEL</a></li>
+                                        <li><a href="../templates/pdf to pdfa preview.html"><img
+                                                    src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                                TO PDF/A</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown" onclick="toolsDropdown()"><a href="#"><span>ALL PDF TOOLS <i
+                                    class="bi bi-caret-down-fill"></i></span><i class="bi bi-wrench"
+                                style="display: none;"></i></a>
+                        <div class="tools-dropdown">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <ul class="dropdown-content">
+                                <li><span>ORGANIZE PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/merge preview.html"><img src="../assets/mergePdf.svg"
+                                                    alt="">MERGE
+                                                PDF</a></li>
+                                        <li><a href="../templates/split preview.html"><img src="../assets/splitPdf.svg"
+                                                    alt="">SPLIT
+                                                PDF</a>
+                                        </li>
+                                        <li><a href="../templates/organize pdf preview.html"><img
+                                                    src="../assets/organizepdf.svg" alt="">ORGANIZE PDF</a>
+                                        </li>
+                                        <li><a href="#"><img src="../assets/scanToPdf.svg" alt="">SCAN TO
+                                                PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>OPTIMIZE PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/compress preview.html"><img
+                                                    src="../assets/compressPdf.svg" alt="">COMPRESS PDF</a>
+                                        </li>
+                                        <li><a href="../templates/Repair preview.html"><img
+                                                    src="../assets/repairPdf.svg" alt="">REPAIR PDF</a>
+                                        </li>
+                                        <li><a href="../templates/ocr pdf preview.html"><img src="../assets/ocrPdf.svg"
+                                                    alt="">OCR
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert to PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/JPG to pdf preview.html"><img
+                                                    src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/word to pdf preview.html"><img
+                                                    src="../assets/wordToPdf.svg" alt="">WORD
+                                                TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/powerpoint to pdf preview.html"><img
+                                                    src="../assets/pptToPdf.svg" alt="">POWERPOINT TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/excel to pdf preview.html"><img
+                                                    src="../assets/excleToPdf.svg" alt="">EXCEL TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/html to pdf preview.html"><img
+                                                    src="../assets/htmlToPdf.svg" alt="">HTML
+                                                TO PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert from PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/pdf to jpg preview.html"><img
+                                                    src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                                JPG</a></li>
+                                        <li><a href="../templates/pdf to word preview.html"><img
+                                                    src="../assets/pdfToWord.svg" alt="">PDF
+                                                TO WORD</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to powerpoint preview.html"><img
+                                                    src="../assets/pdfToPpt.svg" alt="">PDF TO POWERPOINT</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to excel preview.html"><img
+                                                    src="../assets/pdfToExcle.svg" alt="">PDF
+                                                TO
+                                                EXCEL</a></li>
+                                        <li><a href="../templates/pdf to pdfa preview.html"><img
+                                                    src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                                TO PDF/A</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><span>EDIT PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/rotate pdf preview.html"><img
+                                                    src="../assets/rotatePdf.svg" alt="">ROTATE PDF</a></li>
+                                        <li><a href="../templates/pagenumberpreview.html"><img
+                                                    src="../assets/pageNoPdf.svg" alt="">ADD
+                                                PAGE NUMBER</a>
+                                        </li>
+                                        <li><a href="../templates/watermark preview.html"><img
+                                                    src="../assets/watermark.svg" alt="">ADD Watermark</a>
+                                        </li>
+                                        <li><a href="../templates/edit pdf options preview.html"><img
+                                                    src="../assets/editPdf.svg" alt="">EDIT
+                                                PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>PDF SECUIRTY</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/unlockpdf preview.html"><img
+                                                    src="../assets/unlockPdf.svg" alt="">UNLOCK PDF</a></li>
+                                        <li><a href="../templates/protectpdf preview.html"><img
+                                                    src="../assets/protectPdf.svg" alt="">PROTECT PDF</a>
+                                        </li>
+                                        <li><a href="../templates/sign pdf preview.html"><img
+                                                    src="../assets/signPdf.svg" alt="">SIGN
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <button><span>Login</span><i class="bi bi-person-fill" style="display: none;"></i></button>
+            </div>
+        </div>
+    </header>
+    <div id="box">
+        <div class="container3">
+            <div class="container4">
+                <div class="drop-zone">
+                    <p>Drag and drop a PDF file here</p>
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <p>or</p>
+                    <input type="file" id="file-input" accept=".pdf ">
+                </div>
+
+            </div>
+            <div class="pdf-viewer">
+                <embed id="pdf-embed" type="application/pdf" src="" width="100%" height="100%">
+                <a id="download-link" download="document.pdf" style="display: none;">Download PDF</a>
+            </div>
+
+        </div>
+        <div class="container5">
+            <div class="split-heading">WATERMARK OPTIONS</div>
+            <hr>
+            <div class="split-options">
+                <div class="split-option" id="splitByRange">
+                    <!-- Replace the existing icon with the provided SVG -->
+                    <svg width="53px" height="42px" viewBox="0 0 53 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g id="----↳-PDF/IMG---Watermark" stroke="none" stroke-width="1" fill="none"
+                            fill-rule="evenodd">
+                            <g id="Watermark" transform="translate(-1084.000000, -157.000000)" fill="#161616">
+                                <g id="A-Text" transform="translate(1084.000000, 157.000000)">
+                                    <path
+                                        d="M1.134,37 L51.866,37 C52.4922909,37 53,37.5077091 53,38.134 L53,40.4462469 C53,41.0725378 52.4922909,41.5802469 51.866,41.5802469 L1.134,41.5802469 C0.507709094,41.5802469 -3.03192595e-15,41.0725378 -3.10862447e-15,40.4462469 L0,38.134 C-7.66985154e-17,37.5077091 0.507709094,37 1.134,37 Z"
+                                        id="Rectangle-23"></path>
+                                    <path
+                                        d="M24.8461538,0 L13,30.6043771 L17.8461538,30.6043771 L20.2584615,24.0462963 L33.72,24.0462963 L36.1323077,30.6043771 L40.9784615,30.6043771 L29.1538462,0 L24.8461538,0 L24.8461538,0 Z M21.8738462,19.6742424 L27,5.83669192 L32.1261538,19.6742424 L21.8738462,19.6742424 L21.8738462,19.6742424 Z"
+                                        id="Shape"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                    <br>
+                    <p>Place Text</p>
+                </div>
+                <div class="split-option" id="extractRanges">
+                    <svg width="53px" height="43px" viewBox="0 0 53 43" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g id="----↳-PDF/IMG---Watermark" stroke="none" stroke-width="1" fill="none"
+                            fill-rule="evenodd">
+                            <g id="Watermark" transform="translate(-1306.000000, -157.000000)" fill="#7D7D7D">
+                                <g id="IMAGE" transform="translate(1306.000000, 157.000000)">
+                                    <path
+                                        d="M1.134,37.4650673 L51.866,37.4650673 C52.4922909,37.4650673 53,37.9727764 53,38.5990673 L53,40.9113143 C53,41.5376052 52.4922909,42.0453143 51.866,42.0453143 L1.134,42.0453143 C0.507709094,42.0453143 -3.03192595e-15,41.5376052 -3.10862447e-15,40.9113143 L0,38.5990673 C-7.66985154e-17,37.9727764 0.507709094,37.4650673 1.134,37.4650673 Z"
+                                        id="Rectangle-23"></path>
+                                    <path
+                                        d="M1.134,0.46506734 L51.866,0.46506734 C52.4922909,0.46506734 53,0.972776434 53,1.59906734 L53,3.91131425 C53,4.53760516 52.4922909,5.04531425 51.866,5.04531425 L1.134,5.04531425 C0.507709094,5.04531425 -3.03192595e-15,4.53760516 -3.10862447e-15,3.91131425 L0,1.59906734 C-7.66985154e-17,0.972776434 0.507709094,0.46506734 1.134,0.46506734 Z"
+                                        id="Rectangle-23-Copy-3"></path>
+                                    <path
+                                        d="M0,38.2106123 L3.55271368e-15,2.80993796 C3.55271368e-15,2.21107657 0.507709094,1.72560349 1.134,1.72560349 L3.44624691,1.72560349 C4.07253782,1.72560349 4.58024691,2.21107657 4.58024691,2.80993796 L4.58024691,38.2106123 C4.58024691,38.8094737 4.07253782,39.2949468 3.44624691,39.2949468 L1.134,39.2949468 C0.507709094,39.2949468 0,38.8094737 0,38.2106123 Z"
+                                        id="Rectangle-23-Copy"></path>
+                                    <path
+                                        d="M48.3549383,38.3159181 L48.3549383,2.91524374 C48.3549383,2.31638234 48.8626474,1.83090926 49.4889383,1.83090926 L51.8011852,1.83090926 C52.4274761,1.83090926 52.9351852,2.31638234 52.9351852,2.91524374 L52.9351852,38.3159181 C52.9351852,38.9147794 52.4274761,39.4002525 51.8011852,39.4002525 L49.4889383,39.4002525 C48.8626474,39.4002525 48.3549383,38.9147794 48.3549383,38.3159181 Z"
+                                        id="Rectangle-23-Copy-2"></path>
+                                    <path
+                                        d="M31.6923782,15.2520818 L45.7032728,33.6111851 C45.7843565,33.7174326 45.7639571,33.8692945 45.6577095,33.9503782 C45.6155337,33.982565 45.5639492,34 45.5108946,34 L17.4891054,34 C17.3554525,34 17.2471054,33.8916529 17.2471054,33.758 C17.2471054,33.7049454 17.2645404,33.6533609 17.2967272,33.6111851 L31.3076218,15.2520818 C31.3887055,15.1458342 31.5405674,15.1254349 31.6468149,15.2065185 C31.6639658,15.2196074 31.6792894,15.2349309 31.6923782,15.2520818 Z"
+                                        id="Rectangle-4"></path>
+                                    <path
+                                        d="M18.6317832,21.1631602 L28.7772059,33.7241597 C28.8359913,33.7969416 28.8246448,33.9035979 28.751863,33.9623832 C28.7217275,33.9867234 28.6841601,34 28.6454227,34 L8.35457733,34 C8.2610203,34 8.18517733,33.924157 8.18517733,33.8306 C8.18517733,33.7918625 8.1984539,33.7542952 8.2227941,33.7241597 L18.3682168,21.1631602 C18.4270021,21.0903783 18.5336584,21.0790319 18.6064403,21.1378173 C18.6157603,21.145345 18.6242555,21.1538402 18.6317832,21.1631602 Z"
+                                        id="Rectangle-4-Copy"></path>
+                                    <circle id="Oval-8" cx="14.5" cy="13.5" r="3.5"></circle>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                    <br>
+                    <p>Place Image</p>
+                </div>
+            </div>
+            <button class="option__btn active" id="pickwatermark" style="z-index: 1;">
+                <div class="option__btn__icon" id="watermarkPreview">
+                    <svg width="24px" height="20px" viewBox="0 0 24 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g transform="translate(-736.000000, -1133.000000)" fill="#000000">
+                                <g transform="translate(736.000000, 1133.000000)">
+                                    <path
+                                        d="M21.8965758,16.9653135 L21.8965758,2.28467061 L2.07407407,2.28467061 L2.07407407,16.9653135 L21.8965758,16.9653135 Z M23.9706499,17.3072845 C23.9896561,17.360927 24,17.418667 24,17.4788229 L24,18.5258782 C24,18.8094816 23.770094,19.0393876 23.4864906,19.0393876 L0.513509434,19.0393876 C0.229906005,19.0393876 2.35828404e-16,18.8094816 2.01097001e-16,18.5258782 L0,17.4788229 C-3.75676683e-18,17.4481466 0.00268988762,17.4180985 0.00784666393,17.3889017 C0.00268988762,17.3609836 0,17.3322516 0,17.3029188 L0,0.724105965 C-3.47314032e-17,0.440502536 0.229906005,0.210596531 0.513509434,0.210596531 L23.4864906,0.210596531 C23.770094,0.210596531 24,0.440502536 24,0.724105965 L24,1.77116117 C24,1.83131713 23.9896561,1.88905714 23.9706499,1.94269958 L23.9706499,17.3072845 Z"
+                                        id="Combined-Shape"></path>
+                                    <path
+                                        d="M20.608707,15.3962264 L3.78320483,15.3962264 C3.74083938,15.3962264 3.7064954,15.3618824 3.7064954,15.319517 C3.7064954,15.3019755 3.71250743,15.2849639 3.7235294,15.2713176 L8.31768306,9.58331783 C8.34430285,9.55036 8.39260005,9.545222 8.42555788,9.57184178 C8.42977827,9.57525056 8.43362514,9.57909743 8.43703392,9.58331783 L10.3380665,11.9369772 L14.1770363,6.90660307 C14.2137534,6.85849098 14.2825211,6.84925353 14.3306332,6.88597065 C14.3383996,6.89189767 14.3453386,6.89883664 14.3512656,6.90660307 L20.6958216,15.2201593 C20.7325388,15.2682714 20.7233013,15.337039 20.6751892,15.3737562 C20.6560907,15.3883313 20.6327317,15.3962264 20.608707,15.3962264 Z"
+                                        id="Combined-Shape"></path>
+                                    <circle cx="6.56603774" cy="6.11320755" r="1.58490566"></circle>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <span>Add image</span>
+            </button>
+            </button>
+
+            <div class="sizes">
+                <h3>Transparency</h3>
+                <select name="pagesize" id="pagesize" class="input option">
+                    <option value="fit">No Transparency</option>
+                    <option value="A4">50%</option>
+                    <option value="letter">75%</option>
+                    <option value="letter">25%</option>
+                </select>
+            </div>
+            <div class="sizes">
+                <h3>Rotation</h3>
+                <select name="pagesize" id="pagesize" class="input option">
+                    <option value="fit">Do not Rotate</option>
+                    <option value="A4">45 degrees</option>
+                    <option value="letter">90 degrees</option>
+                    <option value="letter">180 degrees</option>
+                    <option value="letter">270 degrees</option>
+                </select>
+            </div>
+
+            <div class="formarea ranges" id="range-option-1" data-range="1">
+                <div class="form__group__container">
+                    <h5>PAGES</h5>
+                    <div class="title4">
+                        <span class="ico-drag"></span>
+                        <span class="range-num"></span>
+                    </div>
+                    <div class="form__group form__group--boxed">
+                        <label>from page</label>
+                        <input class="input option rangefrom" type="number" name="page_init[]" value="1">
+                    </div>
+                    <div class="form__group form__group--boxed">
+                        <label>to</label>
+                        <input class="input option rangeto" type="number" name="page_end[]" value="1">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="option__title">
+                <h5>Layer</h5>
+            </div>
+            <ul class="option__image">
+                <li class="option__image__item" data-name="margin" data-value="0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="52" viewBox="0 0 48 52">
+                        <path fill="#161616" fill-rule="evenodd"
+                            d="M1110,733 L1133.999,751.667 L1129.626,755.054 L1124.875,758.752 L1133.999,765.848 L1129.626,769.235 L1110,784.515 L1090.347,769.235 L1086,765.848 L1095.114,758.76 L1090.347,755.054 L1086,751.667 L1110,733 Z M1122.434,760.653 L1110,770.333 L1097.557,760.66 L1090.883,765.85 L1109.998,780.714 L1129.106,765.844 L1122.434,760.653 Z"
+                            transform="translate(-1086 -733)"></path>
+                    </svg>
+
+                    <br>
+                    <div class="option__image__item__title">
+                        <h6>Over The PDF Content</h6>
+                    </div>
+                </li>
+
+                <li class="option__image__item" data-name="margin" data-value="40">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="52" viewBox="0 0 48 52">
+                        <path fill="#161616" fill-rule="evenodd"
+                            d="M1327,721.0001 L1303,739.6671 L1307.347,743.0541 L1312.114,746.7601 L1303,753.8481 L1307.347,757.2351 L1327,772.5151 L1346.626,757.2351 L1350.999,753.8481 L1341.875,746.7521 L1346.626,743.0541 L1350.999,739.6671 L1327,721.0001 Z M1307.883,739.6691 L1327,724.8011 L1346.106,739.6611 L1326.998,754.5331 L1307.883,739.6691 Z"
+                            transform="translate(-1303 -721)"></path>
+                    </svg>
+                    <br>
+                    <div class="option__image__item__title">
+                        <h6>Below the PDF Content</h6>
+                    </div>
+                </li>
+            </ul>
+
+
+            <a href=""> <button class="btn split-button " id="spl">ADD WATERMARK</button></a>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.js"></script>
+    <script>
+        const dropZone = document.querySelector('.drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const pdfViewer = document.querySelector('.pdf-viewer');
+        const pdfEmbed = document.getElementById('pdf-embed');
+        const downloadLink = document.getElementById('download-link');
+
+        // Prevent default behavior for file drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        // Highlight the drop zone when a file is dragged over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('highlight');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('highlight');
+            });
+        });
+
+        // Handle file drop
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        // Handle file selection from the input element
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            handleFiles(files);
+        });
+
+        // Handle file upload
+        function handleFiles(files) {
+            const file = files[0];
+
+            if (file.type === 'application/pdf') {
+                const fileURL = URL.createObjectURL(file);
+                pdfEmbed.setAttribute('src', fileURL);
+                pdfViewer.style.display = 'block';
+                pdfViewer.style.marginTop = '40px'
+                pdfViewer.style.height = '55vh';
+                pdfViewer.style.width = '100%';
+
+                downloadLink.href = fileURL;
+                downloadLink.style.display = 'inline-block';
+                downloadLink.style.backgroundColor = '#8b0000';
+                downloadLink.style.color = 'white';
+                downloadLink.style.textDecoration = 'none';
+
+                downloadLink.style.padding = '10px'
+                downloadLink.style.paddingRight = '15px'
+                downloadLink.style.borderRadius = '5px'
+
+
+            } else {
+                alert('Please select a PDF file.');
+            }
+            
+        }
+        
+        imgOptions = document.querySelectorAll(".option__image__item");
+
+        imgOptions.forEach(option => {
+            option.addEventListener("click", () => {
+                option.classList.toggle("option--active");
+                // .classList.remove("option--active");
+            })
+        })
+    </script>
+    <script src="../header.js"></script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF File Upload and Preview</title>
+<link rel="stylesheet" href="preview.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="../styles/styles.css">
+
+<style>
+    #box {
+        padding: 3rem;
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+    }
+
+    .container3 {
+        width: 50%;
+        /* margin-left: 5%; */
+    }
+
+    .container5 {
+        width: 50%;
+        /* margin-top: 40px;
+            margin-left: 5%; */
+        padding-right: 2%;
+        border: 5px dotted red;
+        padding: 20px;
+    }
+
+
+    .container4 {
+        /* margin-top: 40px; */
+        border: 5px dotted red;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    .drop-zone input {
+        margin-left: 100px;
+    }
+
+    /* .botton3 {} */
+
+    #compressButton {
+
+        text-decoration: none;
+        background-color: #8b0000;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 7px;
+    }
+
+
+
+
+    @media (max-width: 768px) {
+        #box {
+            padding: 1rem;
+            /* align-items: center; */
+            flex-direction: column;
+            overflow: hidden;
+            gap: 1rem;
+        }
+
+        .container3 {
+            width: 100%;
+            height: max-content;
+        }
+
+        .container5 {
+            width: 100%;
+            padding-right: 2%;
+            border: 5px dotted red;
+            padding: 20px;
+        }
+
+
+        .container4 {
+            /* margin-top: 40px; */
+            border: 5px dotted red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            text-align: center;
+
+        }
+
+        .drop-zone input {
+            margin-left: 125px;
+            font-size: 1.25rem;
+        }
+    }
+
+    @media (max-width: 374px) {
+        .drop-zone p {
+            font-size: 1.25rem;
+        }
+
+        .container5 h1 {
+            font-size: 2.125rem;
+        }
+    }
+
+    .container3 .fa {
+        font-size: 200px;
+    }
+
+    .split-options a {
+        color: red;
+        text-decoration: none;
+        font-weight: 600;
+
+    }
+
+    .container5 a {
+        color: red;
+        text-decoration: none;
+
+    }
+
+
+    .upload-container {
+        border: 3px dotted #ccc;
+        /* Dotted border with a length of 3px for left section */
+        padding: 20px;
+    }
+
+    #downloadButton {
+        display: none;
+        margin-top: 10px;
+    }
+
+    .btn-darkred {
+        background-color: darkred;
+        border: none;
+        color: white;
+        transition: background-color 0.3s;
+    }
+
+    .btn-darkred:hover {
+        background-color: red-orange;
+        color: white;
+    }
+
+    #pdfRange {
+        display: none;
+    }
+
+    #pdfPreview {
+        display: none;
+    }
+
+
+    .split-heading {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+
+    .split-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    .range-heading {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .range-buttons {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .split-option button {
+        cursor: pointer;
+        text-align: center;
+        background-color: #fff;
+        font-size: 1.125rem;
+        border: none;
+        outline: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        padding: 10px 1.125rem;
+    }
+
+    .split-option button:hover {
+        color: rgb(232, 14, 14);
+        /* Reddish-orange color on hover */
+    }
+
+    .split-option button:hover svg g {
+        fill: rgb(232, 14, 14);
+    }
+
+    .split-option svg g {
+        fill: inherit;
+        transition: all .3s ease;
+    }
+
+    .split-option button p {
+        margin: 0;
+    }
+
+    .split--active{
+        color: red;
+        fill: red;
+    }
+
+    .split-button {
+        background-color: darkred;
+        border: none;
+        color: white;
+        width: 200px;
+        padding: 1rem;
+        transition: background-color 0.3s;
+
+    }
+
+    .split-button:hover {
+        background-color: rgb(237, 11, 11);
+        /* Reddish-orange color on hover */
+        color: white;
+    }
+
+    #spl {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .ranges .title4 {
+        font-weight: 400;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .form__group__container .title4 {
+        font-weight: 400;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+    .input.option,
+    select.option {
+        cursor: inherit;
+        -webkit-transition: none;
+        -o-transition: none;
+        transition: none;
+    }
+
+    .option__panel input,
+    .option__panel select {
+        width: 100%;
+    }
+
+    select,
+    select.input {
+        border-radius: 4px;
+        background-image: url(/img/svg_icons/select.svg);
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding: 4px 32px 4px 12px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .option {
+        -webkit-transition: all .4s linear;
+        -o-transition: all .4s linear;
+        transition: all .4s linear;
+    }
+
+    .input {
+        display: block;
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    select {
+        border-radius: 4px;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+
+    input,
+    label,
+    select {
+        line-height: 20px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22px;
+    }
+
+    select {
+        line-height: normal;
+        color: inherit;
+        font: inherit;
+        margin: 0;
+    }
+
+    .option__image {
+        cursor: pointer;
+        display: -ms-flexbox;
+        display: flex;
+        margin-left: -4px;
+        margin-right: -4px;
+
+    }
+
+    @media (max-width: 930px) {
+        .option__image {
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .option__image {
+            flex-wrap: nowrap;
+        }
+    }
+
+    @media (max-width: 430px) {
+        .option__image {
+            flex-wrap: wrap;
+        }
+    }
+
+    ol,
+    ul {
+        list-style: none;
+    }
+
+    .option__image__item {
+        padding: 1rem 12px;
+        position: relative;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        width: 50%;
+        text-align: center;
+        /* color: ; */
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-pack: center;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        margin: 4px;
+        background: #f5f5fa;
+        border-radius: 8px;
+        -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .1);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .1);
+        -webkit-transition: none;
+        -o-transition: none;
+        transition: all .3s ease;
+        border: 2px solid transparent;
+    }
+
+    .option__image__item button {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color: inherit;
+        font-size: 18px;
+    }
+
+    .option__image__item svg {
+        height: 20px;
+        width: 20px;
+        margin: 5px;
+    }
+
+    .option__image__item:hover {
+        color: #e5322d;
+        border: 2px solid #e5322d;
+    }
+
+    .option--active {
+        color: #e5322d;
+        border: 2px solid #e5322d;
+    }
+
+    h6 {
+        margin: 0;
+    }
+</style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <a href="/">
+                    <h1>Leap <span>Converter</span></h1>
+                </a>
+            </div>
+            <div class="nav-left">
+                <ul class="nav-links">
+                    <li><a href="../templates/merge preview.html">MERGE PDF</a></li>
+                    <li><a href="../templates/split preview.html">SPLIT PDF</a></li>
+                    <li> <a href="../templates/compress preview.html">COMPRESS PDF</a></li>
+                    <li class="dropdown" onclick="convertDropdown()"><a href="#">CONVERT PDF <i
+                                class="bi bi-caret-down-fill"></i></a>
+                        <div class="convert-dropdown">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <ul class="dropdown-content">
+                                <li><span>Convert to PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/JPG to pdf preview.html"><img
+                                                    src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/word to pdf preview.html"><img
+                                                    src="../assets/wordToPdf.svg" alt="">WORD
+                                                TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/powerpoint to pdf preview.html"><img
+                                                    src="../assets/pptToPdf.svg" alt="">POWERPOINT TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/excel to pdf preview.html"><img
+                                                    src="../assets/excleToPdf.svg" alt="">EXCEL TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/html to pdf preview.html"><img
+                                                    src="../assets/htmlToPdf.svg" alt="">HTML
+                                                TO PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert from PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/pdf to jpg preview.html"><img
+                                                    src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                                JPG</a></li>
+                                        <li><a href="../templates/pdf to word preview.html"><img
+                                                    src="../assets/pdfToWord.svg" alt="">PDF
+                                                TO WORD</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to powerpoint preview.html"><img
+                                                    src="../assets/pdfToPpt.svg" alt="">PDF TO POWERPOINT</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to excel preview.html"><img
+                                                    src="../assets/pdfToExcle.svg" alt="">PDF
+                                                TO
+                                                EXCEL</a></li>
+                                        <li><a href="../templates/pdf to pdfa preview.html"><img
+                                                    src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                                TO PDF/A</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown" onclick="toolsDropdown()"><a href="#"><span>ALL PDF TOOLS <i
+                                    class="bi bi-caret-down-fill"></i></span><i class="bi bi-wrench"
+                                style="display: none;"></i></a>
+                        <div class="tools-dropdown">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <ul class="dropdown-content">
+                                <li><span>ORGANIZE PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/merge preview.html"><img src="../assets/mergePdf.svg"
+                                                    alt="">MERGE
+                                                PDF</a></li>
+                                        <li><a href="../templates/split preview.html"><img src="../assets/splitPdf.svg"
+                                                    alt="">SPLIT
+                                                PDF</a>
+                                        </li>
+                                        <li><a href="../templates/organize pdf preview.html"><img
+                                                    src="../assets/organizepdf.svg" alt="">ORGANIZE PDF</a>
+                                        </li>
+                                        <li><a href="#"><img src="../assets/scanToPdf.svg" alt="">SCAN TO
+                                                PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>OPTIMIZE PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/compress preview.html"><img
+                                                    src="../assets/compressPdf.svg" alt="">COMPRESS PDF</a>
+                                        </li>
+                                        <li><a href="../templates/Repair preview.html"><img
+                                                    src="../assets/repairPdf.svg" alt="">REPAIR PDF</a>
+                                        </li>
+                                        <li><a href="../templates/ocr pdf preview.html"><img src="../assets/ocrPdf.svg"
+                                                    alt="">OCR
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert to PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/JPG to pdf preview.html"><img
+                                                    src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/word to pdf preview.html"><img
+                                                    src="../assets/wordToPdf.svg" alt="">WORD
+                                                TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/powerpoint to pdf preview.html"><img
+                                                    src="../assets/pptToPdf.svg" alt="">POWERPOINT TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/excel to pdf preview.html"><img
+                                                    src="../assets/excleToPdf.svg" alt="">EXCEL TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/html to pdf preview.html"><img
+                                                    src="../assets/htmlToPdf.svg" alt="">HTML
+                                                TO PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert from PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/pdf to jpg preview.html"><img
+                                                    src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                                JPG</a></li>
+                                        <li><a href="../templates/pdf to word preview.html"><img
+                                                    src="../assets/pdfToWord.svg" alt="">PDF
+                                                TO WORD</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to powerpoint preview.html"><img
+                                                    src="../assets/pdfToPpt.svg" alt="">PDF TO POWERPOINT</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to excel preview.html"><img
+                                                    src="../assets/pdfToExcle.svg" alt="">PDF
+                                                TO
+                                                EXCEL</a></li>
+                                        <li><a href="../templates/pdf to pdfa preview.html"><img
+                                                    src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                                TO PDF/A</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><span>EDIT PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/rotate pdf preview.html"><img
+                                                    src="../assets/rotatePdf.svg" alt="">ROTATE PDF</a></li>
+                                        <li><a href="../templates/pagenumberpreview.html"><img
+                                                    src="../assets/pageNoPdf.svg" alt="">ADD
+                                                PAGE NUMBER</a>
+                                        </li>
+                                        <li><a href="../templates/watermark preview.html"><img
+                                                    src="../assets/watermark.svg" alt="">ADD Watermark</a>
+                                        </li>
+                                        <li><a href="../templates/edit pdf options preview.html"><img
+                                                    src="../assets/editPdf.svg" alt="">EDIT
+                                                PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>PDF SECUIRTY</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/unlockpdf preview.html"><img
+                                                    src="../assets/unlockPdf.svg" alt="">UNLOCK PDF</a></li>
+                                        <li><a href="../templates/protectpdf preview.html"><img
+                                                    src="../assets/protectPdf.svg" alt="">PROTECT PDF</a>
+                                        </li>
+                                        <li><a href="../templates/sign pdf preview.html"><img
+                                                    src="../assets/signPdf.svg" alt="">SIGN
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <button><span>Login</span><i class="bi bi-person-fill" style="display: none;"></i></button>
+            </div>
+        </div>
+    </header>
+    <div id="box">
+        <div class="container3">
+            <div class="container4">
+                <div class="drop-zone">
+                    <p>Drag and drop a PDF file here</p>
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <p>or</p>
+                    <input type="file" id="file-input" accept=".pdf ">
+                </div>
+
+            </div>
+            <div class="pdf-viewer">
+                <embed id="pdf-embed" type="application/pdf" src="" width="100%" height="100%">
+                <a id="download-link" download="document.pdf" style="display: none;">Download PDF</a>
+            </div>
+
+        </div>
+        <div class="container5">
+            <div class="split-heading">
+                <h1>Image to PDF Options</h1>
+            </div>
+            <hr>
+            <h4>Page Orientation</h4>
+            <div class="split-container">
+                <div class="split-option" id="splitByRange">
+                    <!-- Replace the existing icon with the provided SVG -->
+                    <button>
+                        <svg width="24px" height="32px" viewBox="0 0 24 32" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g transform="translate(-444.000000, -705.000000)" fill="#161616" fill-rule="nonzero">
+                                    <path
+                                        d="M447,708 L447,734 L465,734 L465,708 L447,708 Z M446,705 L466,705 C467.104569,705 468,705.895431 468,707 L468,735 C468,736.104569 467.104569,737 466,737 L446,737 C444.895431,737 444,736.104569 444,735 L444,707 C444,705.895431 444.895431,705 446,705 Z"
+                                        id="portrait"></path>
+                                </g>
+                            </g>
+                        </svg>
+                        <br>
+                        <p>Portrait</p>
+                    </button>
+                </div>
+                <div class="split-option" id="extractRanges">
+                    <button>
+                        <svg width="32px" height="24px" viewBox="0 0 32 24" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g transform="translate(-571.000000, -709.000000)" fill="#969696" fill-rule="nonzero">
+                                    <path
+                                        d="M574,730 L600,730 L600,712 L574,712 L574,730 Z M571,731 L571,711 C571,709.895431 571.895431,709 573,709 L601,709 C602.104569,709 603,709.895431 603,711 L603,731 C603,732.104569 602.104569,733 601,733 L573,733 C571.895431,733 571,732.104569 571,731 Z"
+                                        id="landscape"></path>
+                                </g>
+                            </g>
+                        </svg>
+                        <br>
+                        <p>Landscape</p>
+                    </button>
+                </div>
+            </div>
+            <div class="sizes">
+                <h3>Page Size</h3>
+                <select name="pagesize" id="pagesize" class="input option">
+                    <option value="fit">Fit (Same page size as image)</option>
+                    <option value="A4">A4 (297x210 mm)</option>
+                    <option value="letter">US Letter (215x279.4 mm)</option>
+                </select>
+            </div>
+            <div class="option__title">
+                <h3> Margin</h3>
+            </div>
+            <ul class="option__image">
+                <li class="option__image__item" data-name="margin" data-value="0">
+                    <button>
+                        <svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g transform="translate(-310.000000, -818.000000)" fill="#979797">
+                                    <g transform="translate(310.000000, 818.000000)">
+                                        <path
+                                            d="M3,3 L3,29 L29,29 L29,3 L3,3 Z M2,0 L30,0 C31.1045695,-2.02906125e-16 32,0.8954305 32,2 L32,30 C32,31.1045695 31.1045695,32 30,32 L2,32 C0.8954305,32 1.3527075e-16,31.1045695 0,30 L0,2 C-1.3527075e-16,0.8954305 0.8954305,2.02906125e-16 2,0 Z"
+                                            id="Rectangle-2-Copy-3" fill-rule="nonzero"></path>
+                                        <path
+                                            d="M9.49927274,9 C10.5384703,9 11.3846154,9.82810603 11.3846154,10.8461538 C11.3846154,11.8642017 10.5384703,12.6923077 9.49927274,12.6923077 C8.45904829,12.6923077 7.61290323,11.8642017 7.61290323,10.8461538 C7.61290323,9.82810603 8.45904829,9 9.49927274,9 Z"
+                                            id="Path"
+                                            transform="translate(9.498759, 10.846154) scale(-1, 1) translate(-9.498759, -10.846154) ">
+                                        </path>
+                                        <path
+                                            d="M13.3544201,20.9990333 L7.37345658,20.9990333 C7.2894992,20.9990333 7.21253827,20.9555336 7.17155908,20.885934 C7.13057988,20.8153678 7.13157938,20.729335 7.17355806,20.6607021 L13.3754094,10.4875648 C13.4583673,10.3502989 13.6922486,10.3502989 13.7752064,10.4875648 L17.3883721,16.4160949 L19.811142,13.9926765 C19.8551197,13.9482101 19.9150893,13.9240436 19.9780573,13.9240436 L19.9860532,13.9240436 C20.0520198,13.9259769 20.1139883,13.9549767 20.155967,14.0042764 L25.8980518,20.5891692 C25.9590208,20.6297689 26,20.6984019 26,20.7757347 C26,20.8994673 25.8960528,21 25.7671182,21 L25.7561238,21 L19.7871542,21 L19.7761598,21 L13.3544201,21 L13.3544201,20.9990333 Z"
+                                            id="Path"
+                                            transform="translate(16.570720, 15.692308) scale(-1, 1) translate(-16.570720, -15.692308) ">
+                                        </path>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                        <div class="option__image__item__title">
+                            <h6>No Margin</h6>
+                        </div>
+                    </button>
+                </li>
+                <li class="option__image__item" data-name="margin" data-value="20">
+                    <button>
+                        <svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g transform="translate(-441.000000, -818.000000)" fill="#161616">
+                                    <g transform="translate(441.000000, 818.000000)">
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 0 2 0 2 2 0 2"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="4 0 6 0 6 2 4 2"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 2 4 2 4 4 2 4"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 4 2 4 2 6 0 6"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 6 4 6 4 8 2 8"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 8 2 8 2 10 0 10">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 10 4 10 4 12 2 12">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 12 2 12 2 14 0 14">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 14 4 14 4 16 2 16">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 16 2 16 2 18 0 18">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 18 4 18 4 20 2 20">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 20 2 20 2 22 0 22">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 22 4 22 4 24 2 24">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 24 2 24 2 26 0 26">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 26 4 26 4 28 2 28">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 28 2 28 2 30 0 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="4 28 6 28 6 30 4 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 30 4 30 4 32 2 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="6 30 8 30 8 32 6 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="10 30 12 30 12 32 10 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="8 0 10 0 10 2 8 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="6 2 8 2 8 4 6 4"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="10 2 12 2 12 4 10 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="8 28 10 28 10 30 8 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="12 0 14 0 14 2 12 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="16 0 18 0 18 2 16 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="14 2 16 2 16 4 14 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="12 28 14 28 14 30 12 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="16 28 18 28 18 30 16 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="14 30 16 30 16 32 14 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="18 30 20 30 20 32 18 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="22 30 24 30 24 32 22 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="20 0 22 0 22 2 20 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="18 2 20 2 20 4 18 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="22 2 24 2 24 4 22 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="20 28 22 28 22 30 20 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="24 0 26 0 26 2 24 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 0 30 0 30 2 28 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="26 2 28 2 28 4 26 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 4 30 4 30 6 28 6">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 8 30 8 30 10 28 10">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 12 30 12 30 14 28 14">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 16 30 16 30 18 28 18">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 20 30 20 30 22 28 22">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 24 30 24 30 26 28 26">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="24 28 26 28 26 30 24 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 28 30 28 30 30 28 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="26 30 28 30 28 32 26 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 30 32 30 32 32 30 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 2 32 2 32 4 30 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 6 32 6 32 8 30 8">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 10 32 10 32 12 30 12">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 14 32 14 32 16 30 16">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 18 32 18 32 20 30 20">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 22 32 22 32 24 30 24">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 26 32 26 32 28 30 28">
+                                        </polygon>
+                                        <path
+                                            d="M10.8080731,11.1026393 C11.5787699,11.1026393 12.2062937,11.7299923 12.2062937,12.5012407 C12.2062937,13.272489 11.5787699,13.8998421 10.8080731,13.8998421 C10.0366148,13.8998421 9.40909091,13.272489 9.40909091,12.5012407 C9.40909091,11.7299923 10.0366148,11.1026393 10.8080731,11.1026393 Z"
+                                            id="Path"
+                                            transform="translate(10.807692, 12.501241) scale(-1, 1) translate(-10.807692, -12.501241) ">
+                                        </path>
+                                        <path
+                                            d="M13.6671536,20.1928161 L9.23151086,20.1928161 C9.16924582,20.1928161 9.11216953,20.1598617 9.08177826,20.1071348 C9.051387,20.0536755 9.05212825,19.9884991 9.08326077,19.9365045 L13.6827199,12.2295823 C13.7442437,12.125593 13.9176963,12.125593 13.9792201,12.2295823 L16.6588405,16.720893 L18.4556317,14.88497 C18.4882467,14.8512833 18.5327217,14.8329753 18.5794205,14.8329753 L18.5853505,14.8329753 C18.634273,14.83444 18.6802306,14.8564095 18.7113631,14.8937578 L22.969847,19.8823129 C23.0150633,19.9130703 23.0454545,19.9650649 23.0454545,20.0236504 C23.0454545,20.1173872 22.9683645,20.1935484 22.8727432,20.1935484 L22.8645894,20.1935484 L18.4378416,20.1935484 L18.4296879,20.1935484 L13.6671536,20.1935484 L13.6671536,20.1928161 Z"
+                                            id="Path"
+                                            transform="translate(16.052448, 16.172569) scale(-1, 1) translate(-16.052448, -16.172569) ">
+                                        </path>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                        <div class="option__image__item__title">
+                            <h6>Small</h6>
+                        </div>
+                    </button>
+                </li>
+                <li class="option__image__item" data-name="margin" data-value="40">
+                    <button>
+                        <svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g transform="translate(-571.000000, -818.000000)" fill="#969696">
+                                    <g transform="translate(571.000000, 818.000000)">
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 0 2 0 2 2 0 2"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="4 0 6 0 6 2 4 2"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 2 4 2 4 4 2 4"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 4 2 4 2 6 0 6"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="4 4 6 4 6 6 4 6"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 6 4 6 4 8 2 8"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 8 2 8 2 10 0 10">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 10 4 10 4 12 2 12">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 12 2 12 2 14 0 14">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 14 4 14 4 16 2 16">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 16 2 16 2 18 0 18">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 18 4 18 4 20 2 20">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 20 2 20 2 22 0 22">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 22 4 22 4 24 2 24">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 24 2 24 2 26 0 26">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 26 4 26 4 28 2 28">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="0 28 2 28 2 30 0 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="4 28 6 28 6 30 4 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="2 30 4 30 4 32 2 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="6 30 8 30 8 32 6 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="10 30 12 30 12 32 10 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="8 0 10 0 10 2 8 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="6 2 8 2 8 4 6 4"></polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="10 2 12 2 12 4 10 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="8 28 10 28 10 30 8 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="12 0 14 0 14 2 12 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="16 0 18 0 18 2 16 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="14 2 16 2 16 4 14 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="12 28 14 28 14 30 12 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="16 28 18 28 18 30 16 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="14 30 16 30 16 32 14 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="18 30 20 30 20 32 18 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="22 30 24 30 24 32 22 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="20 0 22 0 22 2 20 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="18 2 20 2 20 4 18 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="22 2 24 2 24 4 22 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="20 28 22 28 22 30 20 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="24 0 26 0 26 2 24 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 0 30 0 30 2 28 2">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="26 2 28 2 28 4 26 4">
+                                        </polygon>
+                                        <path
+                                            d="M26,4 L24,4 L24,6 L22,6 L22,4 L20,4 L20,6 L18,6 L18,4 L16,4 L16,6 L14,6 L14,4 L12,4 L12,6 L10,6 L10,4 L8,4 L8,6 L6,6 L6,8 L4,8 L4,10 L6,10 L6,12 L4,12 L4,14 L6,14 L6,16 L4,16 L4,18 L6,18 L6,20 L4,20 L4,22 L6,22 L6,24 L4,24 L4,26 L6,26 L6,28 L8,28 L8,26 L10,26 L10,28 L12,28 L12,26 L14,26 L14,28 L16,28 L16,26 L18,26 L18,28 L20,28 L20,26 L22,26 L22,28 L24,28 L24,26 L26,26 L26,24 L28,24 L28,22 L26,22 L26,20 L28,20 L28,18 L26,18 L26,16 L28,16 L28,14 L26,14 L26,12 L28,12 L28,10 L26,10 L26,8 L28,8 L28,6 L26,6 L26,4 Z M24,24 L8,24 L8,8 L24,8 L24,24 Z"
+                                            id="Shape" fill-rule="nonzero"></path>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 4 30 4 30 6 28 6">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 8 30 8 30 10 28 10">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 12 30 12 30 14 28 14">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 16 30 16 30 18 28 18">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 20 30 20 30 22 28 22">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 24 30 24 30 26 28 26">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="26 26 28 26 28 28 26 28">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="24 28 26 28 26 30 24 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="28 28 30 28 30 30 28 30">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="26 30 28 30 28 32 26 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 30 32 30 32 32 30 32">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 2 32 2 32 4 30 4">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 6 32 6 32 8 30 8">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 10 32 10 32 12 30 12">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 14 32 14 32 16 30 16">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 18 32 18 32 20 30 20">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 22 32 22 32 24 30 24">
+                                        </polygon>
+                                        <polygon id="Shape" fill-rule="nonzero" points="30 26 32 26 32 28 30 28">
+                                        </polygon>
+                                        <path
+                                            d="M12.2484141,12.3636364 C12.8053047,12.3636364 13.2587413,12.8169495 13.2587413,13.3742387 C13.2587413,13.9315278 12.8053047,14.384841 12.2484141,14.384841 C11.6909732,14.384841 11.2375367,13.9315278 11.2375367,13.3742387 C11.2375367,12.8169495 11.6909732,12.3636364 12.2484141,12.3636364 Z"
+                                            id="Path"
+                                            transform="translate(12.248139, 13.374239) scale(-1, 1) translate(-12.248139, -13.374239) ">
+                                        </path>
+                                        <path
+                                            d="M14.3143304,18.9320222 L11.1092207,18.9320222 C11.0642292,18.9320222 11.022987,18.90821 11.0010269,18.8701105 C10.9790667,18.8314819 10.9796023,18.7843867 11.0020981,18.7468164 L14.3255783,13.1779436 C14.3700342,13.1028029 14.4953677,13.1028029 14.5398236,13.1779436 L16.4760654,16.4232778 L17.7743919,15.0966753 C17.7979589,15.072334 17.8300957,15.059105 17.8638393,15.059105 L17.8681242,15.059105 C17.9034747,15.0601633 17.9366827,15.0760381 17.9591785,15.1030252 L21.0362765,18.7076586 C21.0689489,18.7298833 21.0909091,18.7674536 21.0909091,18.8097864 C21.0909091,18.8775187 21.0352053,18.9325513 20.9661112,18.9325513 L20.9602195,18.9325513 L17.7615372,18.9325513 L17.7556454,18.9325513 L14.3143304,18.9325513 L14.3143304,18.9320222 Z"
+                                            id="Path"
+                                            transform="translate(16.037898, 16.027070) scale(-1, 1) translate(-16.037898, -16.027070) ">
+                                        </path>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                        <div class="option__image__item__title">
+                            <h6>Big</h6>
+                        </div>
+                    </button>
+                </li>
+            </ul>
+            <a href=""><button class="btn split-button " id="spl">Convert To PDF</button></a>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.js"></script>
+    <script>
+        const dropZone = document.querySelector('.drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const pdfViewer = document.querySelector('.pdf-viewer');
+        const pdfEmbed = document.getElementById('pdf-embed');
+        const downloadLink = document.getElementById('download-link');
+
+        // Prevent default behavior for file drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        // Highlight the drop zone when a file is dragged over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('highlight');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('highlight');
+            });
+        });
+
+        // Handle file drop
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        // Handle file selection from the input element
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            handleFiles(files);
+        });
+
+        // Handle file upload
+        function handleFiles(files) {
+            const file = files[0];
+
+            if (file.type === 'application/pdf') {
+                const fileURL = URL.createObjectURL(file);
+                pdfEmbed.setAttribute('src', fileURL);
+                pdfViewer.style.display = 'block';
+                pdfViewer.style.marginTop = '40px'
+                pdfViewer.style.height = '55vh';
+                pdfViewer.style.width = '100%';
+
+                downloadLink.href = fileURL;
+                downloadLink.style.display = 'inline-block';
+                downloadLink.style.backgroundColor = '#8b0000';
+                downloadLink.style.color = 'white';
+                downloadLink.style.textDecoration = 'none';
+
+                downloadLink.style.padding = '10px'
+                downloadLink.style.paddingRight = '15px'
+                downloadLink.style.borderRadius = '5px'
+
+
+            } else {
+                alert('Please select a PDF file.');
+            }
+        }
+
+    </script>
+    </div>
+    <script src="../header.js"></script>
+    <script>
+        marginOptions = document.querySelectorAll(".option__image__item");
+
+        marginOptions.forEach(option => {
+            option.addEventListener("click", () => {
+                option.classList.toggle("option--active");
+                // .classList.remove("option--active");
+            })
+        })
+
+        splitOptions = document.querySelectorAll(".split-option");
+
+        splitOptions.forEach(option => {
+            option.addEventListener("click", () => {
+                option.classList.toggle("split--active");
+                // .classList.remove("option--active");
+            })
+        })
+    </script>
+</body>
+
+</html>

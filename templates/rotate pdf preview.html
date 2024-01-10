@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PDF File Upload and Preview</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <style>
+        #box {
+            padding: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+        }
+
+        .container3 {
+            width: 50%;
+            /* margin-left: 5%; */
+        }
+
+        .container5 {
+            width: 50%;
+            /* margin-top: 40px;
+            margin-left: 5%; */
+            padding-right: 2%;
+            border: 5px dotted red;
+            padding: 20px;
+        }
+
+
+        .container4 {
+            /* margin-top: 40px; */
+            border: 5px dotted red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .drop-zone input {
+            margin-left: 100px;
+        }
+
+        @media (max-width: 768px) {
+            #box {
+                padding: 1rem;
+                /* align-items: center; */
+                flex-direction: column;
+                overflow: hidden;
+                gap: 1rem;
+            }
+
+            .container3 {
+                width: 100%;
+                height: max-content;
+            }
+
+            .container5 {
+                width: 100%;
+                padding-right: 2%;
+                border: 5px dotted red;
+                padding: 10px;
+            }
+
+
+            .container4 {
+                /* margin-top: 40px; */
+                overflow: hidden;
+                border: 5px dotted red;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-top: 40px;
+                padding-bottom: 40px;
+                text-align: center;
+
+            }
+
+            .drop-zone input {
+                margin-left: 125px;
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 374px) {
+            .drop-zone p {
+                font-size: 1.25rem;
+            }
+
+            .container5 h1 {
+                font-size: 2.125rem;
+            }
+        }
+
+        .container3 .fa {
+            font-size: 200px;
+        }
+
+        .upload-container {
+            border: 3px dotted #ccc;
+            padding: 20px;
+        }
+
+        #downloadButton {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .btn-darkred {
+            background-color: darkred;
+            border: none;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .btn-darkred:hover {
+            background-color: red-orange;
+            color: white;
+        }
+
+        #pdfRange {
+            display: none;
+        }
+
+        #pdfPreview {
+            display: none;
+        }
+
+        .split-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .split-heading {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .split-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .split-option {
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .range-heading {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .range-buttons {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .split-button {
+            background-color: darkred;
+            border: none;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .split-button:hover {
+            background-color: red-orange;
+            color: white;
+        }
+
+        #spl {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .merge-section {
+            padding: 10px;
+            border: 1px solid grey;
+            /* margin-top: 20px; */
+            margin-left: 0px;
+        }
+
+        .merge-heading {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .merge-horizontal-row {
+            border-top: 1px solid #ccc;
+        }
+
+        .merge-paragraph {
+            background-color: skyblue;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .merge-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pdf-name-button {
+            background-color: darkred;
+            border: none;
+            color: white;
+            transition: background-color 0.3s;
+            display: inline-block;
+            padding: 1rem;
+            width: 100%;
+            transition: all .3s ease;
+        }
+
+        .pdf-name-button:hover {
+            background-color: rgb(203, 11, 11);
+            color: white;
+        }
+
+        .option__actions {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .option__btn {
+            border: none;
+            padding: 5px 1rem;
+            background-color: darkred;
+            width: 200px;
+            color: white;
+            transition: all .3s ease;
+        }
+
+        .option__btn:hover {
+            color: white;
+            background-color: rgb(203, 11, 11);
+        }
+
+        .option__btn svg {
+            height: 30px;
+            width: 30px;
+        }
+
+        .option__panel__content {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <a href="/">
+                    <h1>Leap <span>Converter</span></h1>
+                </a>
+            </div>
+            <div class="nav-left">
+                <ul class="nav-links">
+                    <li><a href="../templates/merge preview.html">MERGE PDF</a></li>
+                    <li><a href="../templates/split preview.html">SPLIT PDF</a></li>
+                    <li> <a href="../templates/compress preview.html">COMPRESS PDF</a></li>
+                    <li class="dropdown" onclick="convertDropdown()"><a href="#">CONVERT PDF <i
+                                class="bi bi-caret-down-fill"></i></a>
+                        <div class="convert-dropdown">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <ul class="dropdown-content">
+                                <li><span>Convert to PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/JPG to pdf preview.html"><img
+                                                    src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/word to pdf preview.html"><img
+                                                    src="../assets/wordToPdf.svg" alt="">WORD
+                                                TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/powerpoint to pdf preview.html"><img
+                                                    src="../assets/pptToPdf.svg" alt="">POWERPOINT TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/excel to pdf preview.html"><img
+                                                    src="../assets/excleToPdf.svg" alt="">EXCEL TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/html to pdf preview.html"><img
+                                                    src="../assets/htmlToPdf.svg" alt="">HTML
+                                                TO PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert from PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/pdf to jpg preview.html"><img
+                                                    src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                                JPG</a></li>
+                                        <li><a href="../templates/pdf to word preview.html"><img
+                                                    src="../assets/pdfToWord.svg" alt="">PDF
+                                                TO WORD</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to powerpoint preview.html"><img
+                                                    src="../assets/pdfToPpt.svg" alt="">PDF TO POWERPOINT</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to excel preview.html"><img
+                                                    src="../assets/pdfToExcle.svg" alt="">PDF
+                                                TO
+                                                EXCEL</a></li>
+                                        <li><a href="../templates/pdf to pdfa preview.html"><img
+                                                    src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                                TO PDF/A</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown" onclick="toolsDropdown()"><a href="#"><span>ALL PDF TOOLS <i
+                                    class="bi bi-caret-down-fill"></i></span><i class="bi bi-wrench"
+                                style="display: none;"></i></a>
+                        <div class="tools-dropdown">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <ul class="dropdown-content">
+                                <li><span>ORGANIZE PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/merge preview.html"><img src="../assets/mergePdf.svg"
+                                                    alt="">MERGE
+                                                PDF</a></li>
+                                        <li><a href="../templates/split preview.html"><img src="../assets/splitPdf.svg"
+                                                    alt="">SPLIT
+                                                PDF</a>
+                                        </li>
+                                        <li><a href="../templates/organize pdf preview.html"><img
+                                                    src="../assets/organizepdf.svg" alt="">ORGANIZE PDF</a>
+                                        </li>
+                                        <li><a href="#"><img src="../assets/scanToPdf.svg" alt="">SCAN TO
+                                                PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>OPTIMIZE PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/compress preview.html"><img
+                                                    src="../assets/compressPdf.svg" alt="">COMPRESS PDF</a>
+                                        </li>
+                                        <li><a href="../templates/Repair preview.html"><img
+                                                    src="../assets/repairPdf.svg" alt="">REPAIR PDF</a>
+                                        </li>
+                                        <li><a href="../templates/ocr pdf preview.html"><img src="../assets/ocrPdf.svg"
+                                                    alt="">OCR
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert to PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/JPG to pdf preview.html"><img
+                                                    src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/word to pdf preview.html"><img
+                                                    src="../assets/wordToPdf.svg" alt="">WORD
+                                                TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/powerpoint to pdf preview.html"><img
+                                                    src="../assets/pptToPdf.svg" alt="">POWERPOINT TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/excel to pdf preview.html"><img
+                                                    src="../assets/excleToPdf.svg" alt="">EXCEL TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/html to pdf preview.html"><img
+                                                    src="../assets/htmlToPdf.svg" alt="">HTML
+                                                TO PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert from PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/pdf to jpg preview.html"><img
+                                                    src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                                JPG</a></li>
+                                        <li><a href="../templates/pdf to word preview.html"><img
+                                                    src="../assets/pdfToWord.svg" alt="">PDF
+                                                TO WORD</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to powerpoint preview.html"><img
+                                                    src="../assets/pdfToPpt.svg" alt="">PDF TO POWERPOINT</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to excel preview.html"><img
+                                                    src="../assets/pdfToExcle.svg" alt="">PDF
+                                                TO
+                                                EXCEL</a></li>
+                                        <li><a href="../templates/pdf to pdfa preview.html"><img
+                                                    src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                                TO PDF/A</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><span>EDIT PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/rotate pdf preview.html"><img
+                                                    src="../assets/rotatePdf.svg" alt="">ROTATE PDF</a></li>
+                                        <li><a href="../templates/pagenumberpreview.html"><img
+                                                    src="../assets/pageNoPdf.svg" alt="">ADD
+                                                PAGE NUMBER</a>
+                                        </li>
+                                        <li><a href="../templates/watermark preview.html"><img
+                                                    src="../assets/watermark.svg" alt="">ADD Watermark</a>
+                                        </li>
+                                        <li><a href="../templates/edit pdf options preview.html"><img
+                                                    src="../assets/editPdf.svg" alt="">EDIT
+                                                PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>PDF SECUIRTY</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/unlockpdf preview.html"><img
+                                                    src="../assets/unlockPdf.svg" alt="">UNLOCK PDF</a></li>
+                                        <li><a href="../templates/protectpdf preview.html"><img
+                                                    src="../assets/protectPdf.svg" alt="">PROTECT PDF</a>
+                                        </li>
+                                        <li><a href="../templates/sign pdf preview.html"><img
+                                                    src="../assets/signPdf.svg" alt="">SIGN
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <button><span>Login</span><i class="bi bi-person-fill" style="display: none;"></i></button>
+            </div>
+        </div>
+    </header>
+    <div id="box">
+        <div class="container3">
+            <div class="container4">
+                <div class="drop-zone">
+                    <p>Drag and drop a PDF file here</p>
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <p>or</p>
+                    <input type="file" id="file-input" accept=".pdf ">
+                </div>
+
+            </div>
+            <div class="pdf-viewer">
+                <embed id="pdf-embed" type="application/pdf" src="" width="100%" height="100%">
+                <a id="download-link" download="document.pdf" style="display: none;">Download PDF</a>
+            </div>
+
+        </div>
+        <div class="container5">
+            <div class="merge-section">
+                <div class="option__panel option__panel--active" id="merge-options">
+                    <div class="option__panel__title">
+                        <h1>Rotate PDF</h1>
+                    </div>
+                    <div class="option__panel__content">
+                        <div class="option__rotateSelect">
+
+                            <div class="info">
+                                Mouse over PDF file below and a
+                                <svg width="14" height="17" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="m11.328 6.375 1.24-1.2A6.505 6.505 0 0 1 14 8.452h-1.775a4.904 4.904 0 0 0-.896-2.087l-.001.01Zm.896 3.778H14a6.552 6.552 0 0 1-1.424 3.288l-1.24-1.2a4.963 4.963 0 0 0 .888-2.088Zm-.888 4.497a7.118 7.118 0 0 1-3.427 1.36v-1.725a5.31 5.31 0 0 0 2.162-.871l1.266 1.226-.001.01ZM6.152 2.595V0l4 3.846-4 3.76V4.303c-2.496.406-4.394 2.485-4.394 4.995 0 2.51 1.898 4.6 4.394 4.995v1.708C2.68 15.585 0 12.745 0 9.298c0-3.447 2.68-6.29 6.152-6.703Z"
+                                        fill="#000" fill-rule="evenodd"></path>
+                                </svg> icon will appear, click on the arrows to rotate PDFs.
+                            </div>
+                            <br>
+                            <div class="form__group">
+                                <div class="float-right option" data-action="reset">
+                                    <a href="#" style="text-decoration: none; color: red;">Reset all</a>
+                                </div>
+                                <div class="option__title fileSelector" style="display: none;">
+                                    Select files to rotate:</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="option__panel__content">
+                        <div class="option__title">
+                            <h4>Rotation</h4>
+                        </div>
+                        <div class="form__group">
+
+                            <div class="option__actions">
+                                <button class="option__btn option--action" data-action="rotateRight">
+                                    <div class="option__btn__icon">
+                                        <svg width="52px" height="45px" viewBox="0 0 52 45" version="1.1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(-1129.000000, -324.000000)" fill="#FFFFFF"
+                                                    fill-rule="nonzero">
+                                                    <path
+                                                        d="M1137.59139,357.720381 C1138.38,358.666582 1138.25224,360.072918 1137.30604,360.86152 C1136.35983,361.650123 1134.9535,361.522363 1134.1649,360.576162 C1130.84854,356.597043 1129,351.58873 1129,346.302674 C1129,333.985016 1138.98502,324 1151.30267,324 C1163.61983,324 1173.60535,333.98526 1173.60535,346.302674 C1173.60535,347.534417 1172.60682,348.532942 1171.37508,348.532942 C1170.14334,348.532942 1169.14481,347.534417 1169.14481,346.302674 C1169.14481,336.448771 1161.15637,328.460535 1151.30267,328.460535 C1141.4485,328.460535 1133.46053,336.448501 1133.46053,346.302674 C1133.46053,350.535229 1134.93703,354.535554 1137.59139,357.720381 Z M1148.89898,363.98459 C1150.11965,364.149406 1150.97558,365.272561 1150.81077,366.493227 C1150.64595,367.713893 1149.5228,368.569829 1148.30213,368.405013 C1146.74957,368.195385 1145.23254,367.824679 1143.77219,367.30092 C1142.61276,366.885088 1142.00995,365.608088 1142.42578,364.448659 C1142.84162,363.289231 1144.11862,362.686427 1145.27804,363.102258 C1146.44454,363.520625 1147.65693,363.816886 1148.89898,363.98459 Z M1159.91873,361.929904 C1160.99673,361.333992 1162.3537,361.7248 1162.94961,362.802797 C1163.54552,363.880795 1163.15471,365.237767 1162.07672,365.833679 C1161.53589,366.132645 1160.9901,366.405852 1160.43806,366.652835 C1159.31372,367.155874 1157.99447,366.652209 1157.49143,365.527868 C1156.98839,364.403527 1157.49206,363.084275 1158.6164,362.581237 C1159.05225,362.386233 1159.48601,362.169108 1159.91873,361.929904 Z M1176.89222,338.719625 C1177.55727,337.682854 1178.93688,337.381519 1179.97365,338.046573 C1181.01042,338.711628 1181.31175,340.091229 1180.6467,341.128 L1174.22501,351.138927 C1173.55996,352.175697 1172.18036,352.477032 1171.14359,351.811978 L1161.13266,345.390295 C1160.09589,344.72524 1159.79456,343.345639 1160.45961,342.308868 C1161.12466,341.272098 1162.50427,340.970763 1163.54104,341.635817 L1171.67472,346.853313 L1176.89222,338.719625 Z"
+                                                        id="Repeat"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <span>Right</span>
+                                </button>
+
+                                <button class="option__btn option--action" data-action="rotateLeft">
+                                    <div class="option__btn__icon">
+                                        <svg width="52px" height="45px" viewBox="0 0 52 45" version="1.1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g transform="translate(-1260.000000, -324.000000)" fill="#FFFFFF"
+                                                    fill-rule="nonzero">
+                                                    <path
+                                                        d="M1303.40861,357.720381 C1306.06297,354.535554 1307.53947,350.535229 1307.53947,346.302674 C1307.53947,336.448501 1299.5515,328.460535 1289.69733,328.460535 C1279.84363,328.460535 1271.85519,336.448771 1271.85519,346.302674 C1271.85519,347.534417 1270.85666,348.532942 1269.62492,348.532942 C1268.39318,348.532942 1267.39465,347.534417 1267.39465,346.302674 C1267.39465,333.98526 1277.38017,324 1289.69733,324 C1302.01498,324 1312,333.985016 1312,346.302674 C1312,351.58873 1310.15146,356.597043 1306.8351,360.576162 C1306.0465,361.522363 1304.64017,361.650123 1303.69396,360.86152 C1302.74776,360.072918 1302.62,358.666582 1303.40861,357.720381 Z M1292.10102,363.98459 C1293.34307,363.816886 1294.55546,363.520625 1295.72196,363.102258 C1296.88138,362.686427 1298.15838,363.289231 1298.57422,364.448659 C1298.99005,365.608088 1298.38724,366.885088 1297.22781,367.30092 C1295.76746,367.824679 1294.25043,368.195385 1292.69787,368.405013 C1291.4772,368.569829 1290.35405,367.713893 1290.18923,366.493227 C1290.02442,365.272561 1290.88035,364.149406 1292.10102,363.98459 Z M1281.08127,361.929904 C1281.51399,362.169108 1281.94775,362.386233 1282.3836,362.581237 C1283.50794,363.084275 1284.01161,364.403527 1283.50857,365.527868 C1283.00553,366.652209 1281.68628,367.155874 1280.56194,366.652835 C1280.0099,366.405852 1279.46411,366.132645 1278.92328,365.833679 C1277.84529,365.237767 1277.45448,363.880795 1278.05039,362.802797 C1278.6463,361.7248 1280.00327,361.333992 1281.08127,361.929904 Z M1264.10778,338.719625 L1269.32528,346.853313 L1277.45896,341.635817 C1278.49573,340.970763 1279.87534,341.272098 1280.54039,342.308868 C1281.20544,343.345639 1280.90411,344.72524 1279.86734,345.390295 L1269.85641,351.811978 C1268.81964,352.477032 1267.44004,352.175697 1266.77499,351.138927 L1260.3533,341.128 C1259.68825,340.091229 1259.98958,338.711628 1261.02635,338.046573 C1262.06312,337.381519 1263.44273,337.682854 1264.10778,338.719625 Z"
+                                                        id="Repeat-Copy"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <span>Left</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="merge-button">
+                    <button class="pdf-name-button">
+                        Rotate PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.js"></script>
+    <script>
+        const dropZone = document.querySelector('.drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const pdfViewer = document.querySelector('.pdf-viewer');
+        const pdfEmbed = document.getElementById('pdf-embed');
+        const downloadLink = document.getElementById('download-link');
+
+        // Prevent default behavior for file drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        // Highlight the drop zone when a file is dragged over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('highlight');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('highlight');
+            });
+        });
+
+        // Handle file drop
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        // Handle file selection from the input element
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            handleFiles(files);
+        });
+
+        // Handle file upload
+        function handleFiles(files) {
+            const file = files[0];
+
+            if (file.type === 'application/pdf') {
+                const fileURL = URL.createObjectURL(file);
+                pdfEmbed.setAttribute('src', fileURL);
+                pdfViewer.style.display = 'block';
+                pdfViewer.style.marginTop = '40px'
+                pdfViewer.style.height = '55vh';
+                pdfViewer.style.width = '100%';
+
+                downloadLink.href = fileURL;
+                downloadLink.style.display = 'inline-block';
+                downloadLink.style.backgroundColor = '#8b0000';
+                downloadLink.style.color = 'white';
+                downloadLink.style.textDecoration = 'none';
+
+                downloadLink.style.padding = '10px'
+                downloadLink.style.paddingRight = '15px'
+                downloadLink.style.borderRadius = '5px'
+
+
+            } else {
+                alert('Please select a PDF file.');
+            }
+        }
+    </script>
+    <script src="../header.js"></script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF File Upload and Preview</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="../styles/styles.css">
+<style>
+    #box {
+        padding: 3rem;
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+    }
+
+    .container3 {
+        width: 50%;
+        /* margin-left: 5%; */
+    }
+
+    .container5 {
+        width: 50%;
+        /* margin-left: 5%; */
+        padding-right: 2%;
+        border: 5px dotted red;
+        padding: 20px;
+    }
+
+
+    .container4 {
+        border: 5px dotted red;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    .drop-zone input {
+        margin-left: 140px;
+    }
+
+    /* #compressButton {
+        
+    } */
+
+    @media (max-width: 768px) {
+        #box {
+            padding: 1rem;
+            /* align-items: center; */
+            flex-direction: column;
+            overflow: hidden;
+            gap: 1rem;
+        }
+
+
+
+        .container3 {
+            width: 100%;
+            height: max-content;
+        }
+
+        .container5 {
+            width: 100%;
+            padding-right: 2%;
+            border: 5px dotted red;
+            padding: 20px;
+        }
+
+
+        .container4 {
+            /* margin-top: 40px; */
+            overflow: hidden;
+            border: 5px dotted red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            text-align: center;
+
+        }
+
+        .drop-zone input {
+            margin-left: 125px;
+            font-size: 1.25rem;
+        }
+
+        .container5 h1 {
+            padding-top: 0px;
+        }
+
+
+        #botton {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+    }
+
+    @media (max-width: 374px) {
+        .drop-zone p {
+            font-size: 1.25rem;
+        }
+
+        .container5 h1 {
+            font-size: 2rem;
+        }
+    }
+
+    .container3 .fa {
+        font-size: 200px;
+
+    }
+
+    /* .container5 h1 {
+        padding-top: 10px;
+    } */
+
+    #botton {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .botton1 {
+        width: 100%;
+        padding: 2rem 1rem;
+        color: darkred;
+        background-color: #f5f5fa;
+        border: 2px solid transparent;
+        outline: none !important;
+        transition: all .3s ease;
+    }
+
+    .botton1:hover {
+        border: 2px solid red;
+    }
+
+    .compress--active {
+        border: 2px solid red;
+    }
+
+    #botton2 {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+
+    #botton2 button {
+        width: 200px;
+        padding: 1rem 10px;
+        background-color: darkred;
+        border: none;
+        outline: none;
+        color: white;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    #botton2 button:hover {
+        background-color: rgb(237, 11, 11);
+    }
+</style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <a href="/">
+                    <h1>Leap <span>Converter</span></h1>
+                </a>
+            </div>
+            <div class="nav-left">
+                <ul class="nav-links">
+                    <li><a href="../templates/merge preview.html">MERGE PDF</a></li>
+                    <li><a href="../templates/split preview.html">SPLIT PDF</a></li>
+                    <li> <a href="../templates/compress preview.html">COMPRESS PDF</a></li>
+                    <li class="dropdown" onclick="convertDropdown()"><a href="#">CONVERT PDF <i
+                                class="bi bi-caret-down-fill"></i></a>
+                        <div class="convert-dropdown">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <ul class="dropdown-content">
+                                <li><span>Convert to PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/JPG to pdf preview.html"><img
+                                                    src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/word to pdf preview.html"><img
+                                                    src="../assets/wordToPdf.svg" alt="">WORD
+                                                TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/powerpoint to pdf preview.html"><img
+                                                    src="../assets/pptToPdf.svg" alt="">POWERPOINT TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/excel to pdf preview.html"><img
+                                                    src="../assets/excleToPdf.svg" alt="">EXCEL TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/html to pdf preview.html"><img
+                                                    src="../assets/htmlToPdf.svg" alt="">HTML
+                                                TO PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert from PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/pdf to jpg preview.html"><img
+                                                    src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                                JPG</a></li>
+                                        <li><a href="../templates/pdf to word preview.html"><img
+                                                    src="../assets/pdfToWord.svg" alt="">PDF
+                                                TO WORD</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to powerpoint preview.html"><img
+                                                    src="../assets/pdfToPpt.svg" alt="">PDF TO POWERPOINT</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to excel preview.html"><img
+                                                    src="../assets/pdfToExcle.svg" alt="">PDF
+                                                TO
+                                                EXCEL</a></li>
+                                        <li><a href="../templates/pdf to pdfa preview.html"><img
+                                                    src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                                TO PDF/A</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown" onclick="toolsDropdown()"><a href="#"><span>ALL PDF TOOLS <i
+                                    class="bi bi-caret-down-fill"></i></span><i class="bi bi-wrench"
+                                style="display: none;"></i></a>
+                        <div class="tools-dropdown">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <ul class="dropdown-content">
+                                <li><span>ORGANIZE PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/merge preview.html"><img src="../assets/mergePdf.svg"
+                                                    alt="">MERGE
+                                                PDF</a></li>
+                                        <li><a href="../templates/split preview.html"><img src="../assets/splitPdf.svg"
+                                                    alt="">SPLIT
+                                                PDF</a>
+                                        </li>
+                                        <li><a href="../templates/organize pdf preview.html"><img
+                                                    src="../assets/organizepdf.svg" alt="">ORGANIZE PDF</a>
+                                        </li>
+                                        <li><a href="#"><img src="../assets/scanToPdf.svg" alt="">SCAN TO
+                                                PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>OPTIMIZE PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/compress preview.html"><img
+                                                    src="../assets/compressPdf.svg" alt="">COMPRESS PDF</a>
+                                        </li>
+                                        <li><a href="../templates/Repair preview.html"><img
+                                                    src="../assets/repairPdf.svg" alt="">REPAIR PDF</a>
+                                        </li>
+                                        <li><a href="../templates/ocr pdf preview.html"><img src="../assets/ocrPdf.svg"
+                                                    alt="">OCR
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert to PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/JPG to pdf preview.html"><img
+                                                    src="../assets/jpgToPdf.svg" alt="">JPG TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/word to pdf preview.html"><img
+                                                    src="../assets/wordToPdf.svg" alt="">WORD
+                                                TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/powerpoint to pdf preview.html"><img
+                                                    src="../assets/pptToPdf.svg" alt="">POWERPOINT TO PDF</a>
+                                        </li>
+                                        <li><a href="../templates/excel to pdf preview.html"><img
+                                                    src="../assets/excleToPdf.svg" alt="">EXCEL TO
+                                                PDF</a></li>
+                                        <li><a href="../templates/html to pdf preview.html"><img
+                                                    src="../assets/htmlToPdf.svg" alt="">HTML
+                                                TO PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>Convert from PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/pdf to jpg preview.html"><img
+                                                    src="../assets/pdfToJpg.svg" alt="">PDF TO
+                                                JPG</a></li>
+                                        <li><a href="../templates/pdf to word preview.html"><img
+                                                    src="../assets/pdfToWord.svg" alt="">PDF
+                                                TO WORD</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to powerpoint preview.html"><img
+                                                    src="../assets/pdfToPpt.svg" alt="">PDF TO POWERPOINT</a>
+                                        </li>
+                                        <li><a href="../templates/pdf to excel preview.html"><img
+                                                    src="../assets/pdfToExcle.svg" alt="">PDF
+                                                TO
+                                                EXCEL</a></li>
+                                        <li><a href="../templates/pdf to pdfa preview.html"><img
+                                                    src="../assets/pdfToWPdfa.svg" alt="">PDF
+                                                TO PDF/A</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><span>EDIT PDF</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/rotate pdf preview.html"><img
+                                                    src="../assets/rotatePdf.svg" alt="">ROTATE PDF</a></li>
+                                        <li><a href="../templates/pagenumberpreview.html"><img
+                                                    src="../assets/pageNoPdf.svg" alt="">ADD
+                                                PAGE NUMBER</a>
+                                        </li>
+                                        <li><a href="../templates/watermark preview.html"><img
+                                                    src="../assets/watermark.svg" alt="">ADD Watermark</a>
+                                        </li>
+                                        <li><a href="../templates/edit pdf options preview.html"><img
+                                                    src="../assets/editPdf.svg" alt="">EDIT
+                                                PDF</a></li>
+                                    </ul>
+                                </li>
+                                <li><span>PDF SECUIRTY</span>
+                                    <ul class="dropdown-content-ul">
+                                        <li><a href="../templates/unlockpdf preview.html"><img
+                                                    src="../assets/unlockPdf.svg" alt="">UNLOCK PDF</a></li>
+                                        <li><a href="../templates/protectpdf preview.html"><img
+                                                    src="../assets/protectPdf.svg" alt="">PROTECT PDF</a>
+                                        </li>
+                                        <li><a href="../templates/sign pdf preview.html"><img
+                                                    src="../assets/signPdf.svg" alt="">SIGN
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <button><span>Login</span><i class="bi bi-person-fill" style="display: none;"></i></button>
+            </div>
+        </div>
+    </header>
+    <div id="box">
+        <div class="container3">
+            <div class="container4">
+                <div class="drop-zone">
+                    <p>Drag and drop a PDF file here</p>
+                    <i class="fa fa-upload" aria-hidden="true"></i>
+                    <p>or</p>
+                    <input type="file" id="file-input" accept=".pdf ">
+                </div>
+
+            </div>
+            <div class="pdf-viewer">
+                <embed id="pdf-embed" type="application/pdf" src="" width="100%" height="100%">
+            </div>
+
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.js"></script>
+        <script>
+            const dropZone = document.querySelector('.drop-zone');
+            const fileInput = document.getElementById('file-input');
+            const pdfViewer = document.querySelector('.pdf-viewer');
+            const pdfEmbed = document.getElementById('pdf-embed');
+            const downloadLink = document.getElementById('download-link');
+
+            // Prevent default behavior for file drop
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            // Highlight the drop zone when a file is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.add('highlight');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.remove('highlight');
+                });
+            });
+
+            // Handle file drop
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
+
+            // Handle file selection from the input element
+            fileInput.addEventListener('change', (e) => {
+                const files = e.target.files;
+                handleFiles(files);
+            });
+
+            // Handle file upload
+            function handleFiles(files) {
+                const file = files[0];
+
+                if (file.type === 'application/pdf') {
+                    const fileURL = URL.createObjectURL(file);
+                    pdfEmbed.setAttribute('src', fileURL);
+                    pdfViewer.style.display = 'block';
+                    pdfViewer.style.marginTop = '40px'
+                    pdfViewer.style.height = '55vh';
+                    pdfViewer.style.width = '100%';
+
+                    downloadLink.href = fileURL;
+                    downloadLink.style.display = 'inline-block';
+                    downloadLink.style.backgroundColor = '#8b0000';
+                    downloadLink.style.color = 'white';
+                    downloadLink.style.textDecoration = 'none';
+
+                    downloadLink.style.padding = '10px'
+                    downloadLink.style.paddingRight = '15px'
+                    downloadLink.style.borderRadius = '5px'
+
+
+                } else {
+                    alert('Please select a PDF file.');
+                }
+            }
+        </script>
+
+        <div class="container5">
+
+            <h1>COMPRESSION LEVEL</h1>
+            <hr>
+            <div id="botton">
+                <button class="botton1">
+                    <h3>EXTREME COMPRESSION</h5>
+                        <P>Less quality, high compression</P>
+                </button>
+
+                <button class="botton1">
+                    <h3>RECOMMENDED COMPRESSION</h5>
+                        <P>Good quality, Good compression</P>
+                </button>
+
+                <button class="botton1">
+                    <h3>LESS COMPRESSION</h5>
+                        <P>High quality, Less compression</P>
+                </button>
+
+            </div>
+            <div id="botton2">
+                <button>Compress PDF</button>
+                <button>Download Here</button>
+            </div>
+        </div>
+
+        <script>
+            compressOptions = document.querySelectorAll(".botton1");
+
+            compressOptions.forEach(option => {
+                option.addEventListener("click", () => {
+                    option.classList.toggle("compress--active");
+                    // .classList.remove("option--active");
+                })
+            })
+        </script>
+        <script src="../header.js"></script>
+    </div>
+</body>
+
+</html>

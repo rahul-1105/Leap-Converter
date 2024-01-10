@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cookie&family=Satisfy&family=Ubuntu&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ---------tools--------- */
+
+.tools {
+  padding: 5rem;
+  background-color: #f5f5fa;
+  position: relative;
+}
+
+.card-container {
+  /* border: 2px solid red; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  place-content: center;
+  gap: 5px;
+  position: relative;
+  width: 100%;
+}
+
+.card {
+  background-color: #fff;
+  /* border: 2px solid red; */
+  /* width: 275px; */
+  border-radius: 7px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 10px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background-color: #f5f5fa;
+}
+
+.card a {
+  display: block;
+  text-decoration: none;
+  padding: 1.5rem;
+  height: 100%;
+  color: #333;
+}
+
+.card-img {
+  /* border: 2px solid red;*/
+  height: 55px;
+  width: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-img svg {
+  transition: all 0.3s ease;
+}
+
+.card:hover .card-img svg {
+  transform: scale(1.15);
+}
+
+.card-content h3 {
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.15rem;
+}
+
+.card-content p {
+  color: #47474f;
+  font-size: 13px;
+}
+
+@media (min-width: 1650px) {
+  .card-container {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
